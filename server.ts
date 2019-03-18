@@ -1,21 +1,21 @@
 import * as express from 'express';
 import * as next from 'next';
 
-const port: string | number = process.env.PORT || 8888;
-const portNumber = Number(port);
+const port = process.env.PORT || '8888';
+const portNumber = parseInt(port, 10);
 
 const dev = process.env.NODE_ENV !== 'production';
 const app = next({ dev });
+export default app;
+
 const handle = app.getRequestHandler();
+const routes = require('./routes/router');
 
 app.prepare()
     .then(() => {
         const server = express();
 
-        server.get('/', (req, res) => {
-            const actualPage = '/'
-            app.render(req, res, actualPage);
-        });
+        server.use('/', routes);
 
         server.get('*', (req, res) => {
             return handle(req, res)
@@ -30,3 +30,4 @@ app.prepare()
         console.error(ex.stack);
         process.exit(1);
     });
+    

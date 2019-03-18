@@ -1,11 +1,18 @@
 import * as React from 'react';
 
-export default class extends React.Component {
+interface Props {
+    query: string
+}
+
+export default class extends React.Component<Props> {
+    static async getInitialProps({ query }) {
+        return { query };
+    }
 
     render() {
         return (
             <div>
-                Hello Next.js
+                Hello Next.js {this.props.query}
             </div>
         )
     }
